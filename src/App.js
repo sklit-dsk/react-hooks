@@ -2,6 +2,8 @@ import React from 'react'
 import UseState from './UseState'
 import UseEffectClassComp from './UseEffectClassComp'
 import UseEffectFuncComp from './UseEffectFuncComp'
+import UseRef from './UseRef'
+import InputFocus from './InputFocus'
 import 'macro-css'
 
 function App() {
@@ -25,6 +27,9 @@ function App() {
       {visibleList2 && <UseEffectFuncComp />}
       <button onClick={toggleList2}>Toggle list</button>
       <h2 className="mb-5 mt-15">useRef</h2>
+      <UseRef />
+      <h2 className="mb-5 mt-15">Input focus</h2>
+      <InputFocus />
     </div>
   )
 }
