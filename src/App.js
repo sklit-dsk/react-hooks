@@ -1,9 +1,11 @@
 import React from 'react'
-import UseState from './UseState'
-import UseEffectClassComp from './UseEffectClassComp'
-import UseEffectFuncComp from './UseEffectFuncComp'
-import UseRef from './UseRef'
+import UseState from './hooks/UseState'
+import UseEffectClassComp from './hooks/UseEffectClassComp'
+import UseEffectFuncComp from './hooks/UseEffectFuncComp'
+import UseRef from './hooks/UseRef'
 import InputFocus from './InputFocus'
+import UseMemo from './hooks/useMemoReactMemo/UseMemo'
+import UseCallback from './hooks/UseCallback'
 import 'macro-css'
 
 function App() {
@@ -30,6 +32,10 @@ function App() {
       <UseRef />
       <h2 className="mb-5 mt-15">Input focus</h2>
       <InputFocus />
+      <h2 className="mb-5 mt-15">useMemo and React.memo</h2>
+      <UseMemo />
+      <h2 className="mb-5 mt-15">UseCallback</h2>
+      <UseCallback />
     </div>
   )
 }
