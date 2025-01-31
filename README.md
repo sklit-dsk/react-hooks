@@ -1,70 +1,206 @@
-# Getting Started with Create React App
+# React Hooks: useState, useEffect, useRef, useMemo, React.memo, useCallback
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 📌 Русская версия
 
-## Available Scripts
+### 🟢 useState
+**useState** — хук для управления состоянием в функциональных компонентах.
 
-In the project directory, you can run:
+```jsx
+import { useState } from 'react';
 
-### `npm start`
+function Counter() {
+  const [count, setCount] = useState(0);
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+  return (
+    <div>
+      <p>Счетчик: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Увеличить</button>
+    </div>
+  );
+}
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+🔹 **Когда использовать:** Когда нужно хранить и изменять состояние в компоненте.
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 🔵 useEffect
+**useEffect** — хук для выполнения побочных эффектов в компонентах (запросы к API, подписки, изменение DOM и т. д.).
 
-### `npm run build`
+```jsx
+import { useState, useEffect } from 'react';
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+function Timer() {
+  const [seconds, setSeconds] = useState(0);
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSeconds((prev) => prev + 1);
+    }, 1000);
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    return () => clearInterval(interval); // Очистка таймера при размонтировании
+  }, []);
 
-### `npm run eject`
+  return <p>Прошло секунд: {seconds}</p>;
+}
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+🔹 **Когда использовать:** Когда нужно работать с эффектами (запросы, подписки, таймеры).
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### 🟣 useRef
+**useRef** — хук для хранения изменяемого значения без ререндера компонента. Часто используется для управления DOM-элементами.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```jsx
+import { useRef, useEffect } from 'react';
 
-## Learn More
+function InputFocus() {
+  const inputRef = useRef(null);
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+  useEffect(() => {
+    inputRef.current.focus(); // Устанавливаем фокус на input при загрузке
+  }, []);
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+  return <input ref={inputRef} type="text" placeholder="Фокус здесь" />;
+}
+```
 
-### Code Splitting
+🔹 **Когда использовать:** Для работы с DOM-элементами или хранения значений между рендерами без их изменения.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+---
 
-### Analyzing the Bundle Size
+### 🟠 useMemo
+**useMemo** — хук для мемоизации (оптимизации) вычислений, чтобы не выполнять их заново при каждом ререндере.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```jsx
+import { useState, useMemo } from 'react';
 
-### Making a Progressive Web App
+function ExpensiveComponent({ number }) {
+  const computedValue = useMemo(() => {
+    console.log('Выполняем сложные вычисления...');
+    return number ** 2;
+  }, [number]);
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+  return <p>Результат: {computedValue}</p>;
+}
+```
 
-### Advanced Configuration
+🔹 **Когда использовать:** Когда есть дорогие вычисления, которые не должны пересчитываться без необходимости.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+### 🟡 React.memo
+**React.memo** — HOC (Higher-Order Component), предотвращающий ререндер компонента, если его пропсы не изменились.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+```jsx
+import { memo } from 'react';
 
-### `npm run build` fails to minify
+const Child = memo(({ value }) => {
+  console.log('Ререндер Child');
+  return <p>Значение: {value}</p>;
+});
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+🔹 **Когда использовать:** Когда компонент получает одни и те же пропсы и не должен ререндериться.
+
+---
+
+### 🔴 useCallback
+**useCallback** — хук для мемоизации функций, чтобы они не создавались заново при каждом ререндере.
+
+```jsx
+import { useState, useCallback } from 'react';
+
+function Parent() {
+  const [count, setCount] = useState(0);
+
+  const increment = useCallback(() => {
+    setCount((prev) => prev + 1);
+  }, []);
+
+  return <Child onClick={increment} />;
+}
+```
+
+🔹 **Когда использовать:** Когда функция передается в дочерний компонент, и важно избежать её повторного создания.
+
+---
+
+## 🇺🇸 English Version
+
+### 🟣 useRef
+**useRef** — a hook for storing mutable values without causing re-renders. Often used to reference DOM elements.
+
+```jsx
+import { useRef, useEffect } from 'react';
+
+function InputFocus() {
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
+  return <input ref={inputRef} type="text" placeholder="Focus here" />;
+}
+```
+
+🔹 **When to use:** When dealing with DOM elements or keeping values between renders without triggering re-renders.
+
+---
+
+### 🟠 useMemo
+**useMemo** — a hook for optimizing expensive computations by memoizing the result.
+
+```jsx
+import { useState, useMemo } from 'react';
+
+function ExpensiveComponent({ number }) {
+  const computedValue = useMemo(() => {
+    console.log('Performing expensive calculation...');
+    return number ** 2;
+  }, [number]);
+
+  return <p>Result: {computedValue}</p>;
+}
+```
+
+🔹 **When to use:** When you have expensive computations that should not be recalculated unnecessarily.
+
+---
+
+### 🟡 React.memo
+**React.memo** — a higher-order component (HOC) that prevents re-renders if props remain unchanged.
+
+```jsx
+import { memo } from 'react';
+
+const Child = memo(({ value }) => {
+  console.log('Child re-renders');
+  return <p>Value: {value}</p>;
+});
+```
+
+🔹 **When to use:** When a component receives the same props and should not re-render unnecessarily.
+
+---
+
+### 🔴 useCallback
+**useCallback** — a hook for memoizing functions to prevent unnecessary recreation.
+
+```jsx
+import { useState, useCallback } from 'react';
+
+function Parent() {
+  const [count, setCount] = useState(0);
+
+  const increment = useCallback(() => {
+    setCount((prev) => prev + 1);
+  }, []);
+
+  return <Child onClick={increment} />;
+}
+```
+
+🔹 **When to use:** When passing functions to child components to prevent unnecessary re-creations.
